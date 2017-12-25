@@ -44,7 +44,7 @@ export default class HomeScreenListing extends Component {
       <Image 
         source={{ uri: Connection.getMedia()+item.item.image_name }}
         style={styles.imageStyle} 
-        resizeMode='stretch'
+        //resizeMode='cover'
       />
     )
   }
@@ -64,7 +64,7 @@ export default class HomeScreenListing extends Component {
         <View style={{marginHorizontal:Constants.BaseStyle.DEVICE_WIDTH/100 * 3,marginVertical: Constants.BaseStyle.DEVICE_HEIGHT/100 * 2}}>
           <View style={{flexDirection:'row'}}>
             <View style={{flex:1}}>
-              <Image source={{uri: Connection.getMedia()+data.picture}} style={styles.stylistImage} resizeMode='stretch'/>
+              <Image source={{uri: Connection.getMedia()+data.picture}} style={styles.stylistImage} />
             </View>
             <View style={{flex:2}}>
               <Text style={styles.username}>{data.full_name}</Text>

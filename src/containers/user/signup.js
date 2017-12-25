@@ -34,10 +34,12 @@ class Signup extends Component<{}> {
   constructor(props){
     super(props);
     this.state={
-      fullName:'',
-      email:'',
+      fullName:this.props.navigation.state.params == undefined ? '' : this.props.navigation.state.params.json.name,
+      email:this.props.navigation.state.params == undefined ? '' : this.props.navigation.state.params.json.email,
       phoneNum:'',
-      password:''
+      password:this.props.navigation.state.params == undefined ? '' : 'abc123',
+      loginType: this.props.navigation.state.params == undefined ? '' : 'facebook',
+      fbId: this.props.navigation.state.params == undefined ? '' : this.props.navigation.state.params
     }
   }
 
@@ -113,25 +115,45 @@ class Signup extends Component<{}> {
   render() {
     // let { dispatch } = this.props.navigation;
     // dispatch(ToastActionsCreators.displayInfo('hello'));
+    console.log('here are props in signup ********* ',this.props.navigation.state.params)
     return (
       <View style={styles.container}>
         <BackIcon navigation={this.props.navigation}/>
         <Background />
         <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}  keyboardDismissMode='on-drag' keyboardShouldPersistTaps='always' ref='mainScrollView'>
           <View style={styles.inputView}>
-            <FormTextInput 
-              imageSource={Constants.Images.user.username}
-              placeHolderText={Constants.i18n.common.fullName}
-              onChangeText={(fullName)=>this.setState({fullName})}
-              returnKey='next'
-            />
-            <FormTextInput 
-              imageSource={Constants.Images.user.email}
-              placeHolderText={Constants.i18n.common.email}
-              onChangeText={(email)=>this.setState({email})}
-              keyboard='email-address'
-              returnKey='next'
-            />
+            {this.props.navigation.state.params != undefined ?
+              <FormTextInput 
+                imageSource={Constants.Images.user.username}
+                placeHolderText={Constants.i18n.common.fullName}
+                value={this.state.fullName}
+                onChangeText={(fullName)=>this.setState({fullName})}
+                returnKey='next'
+              /> :
+              <FormTextInput 
+                imageSource={Constants.Images.user.username}
+                placeHolderText={Constants.i18n.common.fullName}
+                onChangeText={(fullName)=>this.setState({fullName})}
+                returnKey='next'
+              />
+            }
+            {this.props.navigation.state.params != undefined ?
+              <FormTextInput 
+                imageSource={Constants.Images.user.email}
+                placeHolderText={Constants.i18n.common.email}
+                value={this.state.email}
+                onChangeText={(email)=>this.setState({email})}
+                keyboard='email-address'
+                returnKey='next'
+              /> :
+              <FormTextInput 
+                imageSource={Constants.Images.user.email}
+                placeHolderText={Constants.i18n.common.email}
+                onChangeText={(email)=>this.setState({email})}
+                keyboard='email-address'
+                returnKey='next'
+              />
+            }
             <FormTextInput 
               imageSource={Constants.Images.user.phoneNum}
               placeHolderText={Constants.i18n.signup.phoneNum}
@@ -139,6 +161,7 @@ class Signup extends Component<{}> {
               keyboard={'phone-pad'}
               returnKey='next'
             />
+            {this.props.navigation.state.params == undefined && 
             <FormTextInput
               ref={'password'}
               onFocus={()=>{this._handleScrollView(ReactNative.findNodeHandle(this.refs.password));}}
@@ -148,7 +171,7 @@ class Signup extends Component<{}> {
               onChangeText={(password)=>this.setState({password})}
               secureText={true}
 
-            />
+            />}
             <FormSubmitButton
               _Press={()=>this.customerSignUp()}
               text={Constants.i18n.common.signup}

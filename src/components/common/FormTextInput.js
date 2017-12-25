@@ -59,7 +59,7 @@ export default class FormTextInput extends Component{
         borderColor:this.state.focusColor,
         borderWidth:this.state.borderBottomWidth
       },this.props.style]}>
-        <Image source={imageSource} style={styles.image} resizeMode='stretch' />
+        <Image source={imageSource} style={styles.image} resizeMode='contain' />
         <TextInput
           ref={"inputBox"}
           autoFocus={autoFocus}
@@ -104,9 +104,9 @@ const styles = StyleSheet.create({
     width:Constants.BaseStyle.DEVICE_WIDTH/100 * 75,
   },
   image:{
-    height: Constants.BaseStyle.DEVICE_HEIGHT/100 * 4,
-    width: Constants.BaseStyle.DEVICE_WIDTH/100 * 6,
-    marginTop: Constants.BaseStyle.DEVICE_HEIGHT/100 * 1.5,
+    height: Constants.BaseStyle.DEVICE_HEIGHT/100 * 2.5,
+    width: Constants.BaseStyle.DEVICE_WIDTH/100 * 5,
+    marginTop: Constants.BaseStyle.DEVICE_HEIGHT/100 * 2.2,
     marginLeft: Constants.BaseStyle.DEVICE_WIDTH/100 * 4,
   }
 });

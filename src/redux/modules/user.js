@@ -26,31 +26,45 @@ export const DEVICE_TOKEN           = "DEVICE_TOKEN";
 export const GET_DETAILS            = "GET_DETAILS";
 export const LOG_IN_SUCCESS         = "LOG_IN_SUCCESS";
 export const GET_STYLIST_LIST       = "GET_STYLIST_LIST";
-export const FB_LOG_IN_SUCCESS       = "FB_LOG_IN_SUCCESS";
+export const FB_LOG_IN_SUCCESS      = "FB_LOG_IN_SUCCESS";
+export const FB_LOG_IN_FAIL         = "FB_LOG_IN_FAIL";
+export const CLEAR_STYLIST_LIST     = "CLEAR_LIST";
 
 // Action Creators
 export const CONSUMER_SIGNUP = (data) => ({ type: NEW_CONSUMER_USER,data});
 export const LOG_SUCCESS = (data) => ({ type: LOG_IN_SUCCESS,data});
 export const FB_LOG_SUCCESS = (data) => ({ type: FB_LOG_IN_SUCCESS,data});
+export const FB_LOG_FAIL = (data) => ({ type: FB_LOG_IN_FAIL,data});
 //export const LOG_OUT_SUCCESS = () => ({ type: LOG_OUT});
 export const setDeviceToken = (data) => ({type:DEVICE_TOKEN,data});
 //export const setRatings = (data) => ({type:RATINGS, data});
 export const getDetails = (data) => ({type:GET_DETAILS , data});
 export const getStylist = (data) => ({type: GET_STYLIST_LIST,data});
+export const clearStylistList = ()=>({type: CLEAR_STYLIST_LIST})
 /**
 * Consumer Signup API.
 */
 export const consumerSignup = (data) => {
   console.log('data ****** ',data)
-  let requestObject = {
-    full_name  : data.fullName,
-    email     : data.email,
-    mobile_number  : data.phoneNum,
-    password  : data.password,
-    user_type : "customer"
+  let requestObject={};
+  if(data.loginType == 'facebook'){
+    requestObject = {
+      facebook: data.fbId.json.id,
+      full_name  : data.fullName,
+      email     : data.email,
+      mobile_number  : data.phoneNum,
+      user_type : "customer"
+    }
   }
-
-  console.log()
+  else{
+    requestObject = {
+      full_name  : data.fullName,
+      email     : data.email,
+      mobile_number  : data.phoneNum,
+      password  : data.password,
+      user_type : "customer"
+    }
+  }
 
   return dispatch => {
     dispatch(startLoading());
@@ -102,29 +116,29 @@ export const loginRestAPI = (data) => {
 /**
 * Facebook Login API
 */
-export const signupFB = (data) => {
-
-  // let requestObject = {
-  //   email: data.email,
-  //   password: data.password
-  // }
-
+export const signupFbAPI = (data) => {
+  let requestObject = {
+    facebook_id:data.json.id
+  }
+  console.log('requestObject ******* ',data)
   return dispatch => {
-    // dispatch(startLoading());
-    // RestClient.post("login",requestObject).then((result) => {
-    //   //console.log('result ****** ',result)
-    //   if(result.status === '200'){
-    //     dispatch(stopLoading());
-        dispatch(FB_LOG_SUCCESS('Hello'));
-    //     dispatch(getDetails(result));
-    //   }else{
-    //     dispatch(stopLoading());
-    //     dispatch(ToastActionsCreators.displayInfo(result.msg));
-    //   }
-    // }).catch(error => {
-    //   console.log("error=> " ,error)
-    //   dispatch(stopLoading());
-    // });
+    //dispatch(startLoading());
+    RestClient.post("checkFaceBook",requestObject).then((result) => {
+      console.log('result ****** ',result)
+      if(result.status === '200'){
+        dispatch(stopLoading());
+        dispatch(FB_LOG_SUCCESS(result));
+        dispatch(getDetails(result));
+      }else{
+
+        dispatch(stopLoading());
+        dispatch(FB_LOG_FAIL({...data, source: "signup"}))
+        dispatch(ToastActionsCreators.displayInfo(result.msg));
+      }
+    }).catch(error => {
+      console.log("error=> " ,error)
+      dispatch(stopLoading());
+    });
   }
 };
 
@@ -134,11 +148,11 @@ export const signupFB = (data) => {
 export const stylistList = (requestObject,callback) => {
   return dispatch => {
     RestClient.get("customer/stylist", requestObject).then((result) => {
-      //console.log('result stylist list ******* ',result.data[0].results)
+      console.log('result stylist list ******* ',result.data[0].results)
       if(result.status == '200'){
-        // if(requestObject.page==0){
-        //   dispatch(clearStylist());
-        // }
+        if(requestObject.page==0){
+          dispatch(clearStylistList());
+        }
         if(_.isFunction(callback)){
           callback(result.data[0].total);
         }
@@ -180,6 +194,12 @@ export default function reducer(state = initialState, action) {
         case LOG_IN_SUCCESS:
           return { ...state, userDetails: action.data };
 
+        case FB_LOG_IN_SUCCESS:
+          return { ...state, userDetails: action.data};
+
+        case FB_LOG_IN_FAIL:
+          return { ...state, userDetails: action.data};
+
         case GET_DETAILS:
         return { ...state, userDetails : { ...state.userDetails , ...action.data } }
 
@@ -188,6 +208,9 @@ export default function reducer(state = initialState, action) {
 
         case GET_STYLIST_LIST:
         return { ...state, stylistList: action.data};
+
+        case CLEAR_STYLIST_LIST:
+        return { ...state, stylistList:[]};
 
         // case RATINGS:
         // return { ...state , reviews : action.data };
