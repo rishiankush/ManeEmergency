@@ -44,15 +44,25 @@ export const getStylist = (data) => ({type: GET_STYLIST_LIST,data});
 */
 export const consumerSignup = (data) => {
   console.log('data ****** ',data)
-  let requestObject = {
-    full_name  : data.fullName,
-    email     : data.email,
-    mobile_number  : data.phoneNum,
-    password  : data.password,
-    user_type : "customer"
+  let requestObject={};
+  if(data.loginType == 'facebook'){
+    requestObject = {
+      facebook: data.fbId.json.id,
+      full_name  : data.fullName,
+      email     : data.email,
+      mobile_number  : data.phoneNum,
+      user_type : "customer"
+    }
   }
-
-  console.log()
+  else{
+    requestObject = {
+      full_name  : data.fullName,
+      email     : data.email,
+      mobile_number  : data.phoneNum,
+      password  : data.password,
+      user_type : "customer"
+    }
+  }
 
   return dispatch => {
     dispatch(startLoading());

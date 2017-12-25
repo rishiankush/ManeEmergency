@@ -48,7 +48,7 @@ let Strings = {
   signup:{
     accountAlready: "Already have an account?",
     phoneNum: "Phone Number",
-    enterMobile: "E.g. +11234567890",
+    enterMobile: "Enter your mobile number E.g. +11234567890",
     enterValidMobile: "Enter valid mobile number",
     enterFullName:'Enter your full name'
   },

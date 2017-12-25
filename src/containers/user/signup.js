@@ -37,7 +37,9 @@ class Signup extends Component<{}> {
       fullName:this.props.navigation.state.params == undefined ? '' : this.props.navigation.state.params.json.name,
       email:this.props.navigation.state.params == undefined ? '' : this.props.navigation.state.params.json.email,
       phoneNum:'',
-      password:this.props.navigation.state.params == undefined ? '' : 'abc123'
+      password:this.props.navigation.state.params == undefined ? '' : 'abc123',
+      loginType: this.props.navigation.state.params == undefined ? '' : 'facebook',
+      fbId: this.props.navigation.state.params == undefined ? '' : this.props.navigation.state.params
     }
   }
 
@@ -113,7 +115,7 @@ class Signup extends Component<{}> {
   render() {
     // let { dispatch } = this.props.navigation;
     // dispatch(ToastActionsCreators.displayInfo('hello'));
-    //console.log('here are props in signup ********* ',this.props.navigation.state.params.loginType)
+    console.log('here are props in signup ********* ',this.props.navigation.state.params)
     return (
       <View style={styles.container}>
         <BackIcon navigation={this.props.navigation}/>
@@ -124,8 +126,8 @@ class Signup extends Component<{}> {
               <FormTextInput 
                 imageSource={Constants.Images.user.username}
                 placeHolderText={Constants.i18n.common.fullName}
+                value={this.state.fullName}
                 onChangeText={(fullName)=>this.setState({fullName})}
-                value={this.props.navigation.state.params.json.name}
                 returnKey='next'
               /> :
               <FormTextInput 
@@ -139,8 +141,8 @@ class Signup extends Component<{}> {
               <FormTextInput 
                 imageSource={Constants.Images.user.email}
                 placeHolderText={Constants.i18n.common.email}
+                value={this.state.email}
                 onChangeText={(email)=>this.setState({email})}
-                value={this.props.navigation.state.params.json.email}
                 keyboard='email-address'
                 returnKey='next'
               /> :
