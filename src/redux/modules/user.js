@@ -26,12 +26,14 @@ export const DEVICE_TOKEN           = "DEVICE_TOKEN";
 export const GET_DETAILS            = "GET_DETAILS";
 export const LOG_IN_SUCCESS         = "LOG_IN_SUCCESS";
 export const GET_STYLIST_LIST       = "GET_STYLIST_LIST";
-export const FB_LOG_IN_SUCCESS       = "FB_LOG_IN_SUCCESS";
+export const FB_LOG_IN_SUCCESS      = "FB_LOG_IN_SUCCESS";
+export const FB_LOG_IN_FAIL         = "FB_LOG_IN_FAIL";
 
 // Action Creators
 export const CONSUMER_SIGNUP = (data) => ({ type: NEW_CONSUMER_USER,data});
 export const LOG_SUCCESS = (data) => ({ type: LOG_IN_SUCCESS,data});
 export const FB_LOG_SUCCESS = (data) => ({ type: FB_LOG_IN_SUCCESS,data});
+export const FB_LOG_FAIL = (data) => ({ type: FB_LOG_IN_FAIL,data});
 //export const LOG_OUT_SUCCESS = () => ({ type: LOG_OUT});
 export const setDeviceToken = (data) => ({type:DEVICE_TOKEN,data});
 //export const setRatings = (data) => ({type:RATINGS, data});
@@ -102,29 +104,29 @@ export const loginRestAPI = (data) => {
 /**
 * Facebook Login API
 */
-export const signupFB = (data) => {
-
-  // let requestObject = {
-  //   email: data.email,
-  //   password: data.password
-  // }
-
+export const signupFbAPI = (data) => {
+  let requestObject = {
+    facebook_id:data.json.id
+  }
+  console.log('requestObject ******* ',data)
   return dispatch => {
-    // dispatch(startLoading());
-    // RestClient.post("login",requestObject).then((result) => {
-    //   //console.log('result ****** ',result)
-    //   if(result.status === '200'){
-    //     dispatch(stopLoading());
-        dispatch(FB_LOG_SUCCESS('Hello'));
-    //     dispatch(getDetails(result));
-    //   }else{
-    //     dispatch(stopLoading());
-    //     dispatch(ToastActionsCreators.displayInfo(result.msg));
-    //   }
-    // }).catch(error => {
-    //   console.log("error=> " ,error)
-    //   dispatch(stopLoading());
-    // });
+    //dispatch(startLoading());
+    RestClient.post("checkFaceBook",requestObject).then((result) => {
+      console.log('result ****** ',result)
+      if(result.status === '200'){
+        dispatch(stopLoading());
+        dispatch(FB_LOG_SUCCESS(result));
+        dispatch(getDetails(result));
+      }else{
+
+        dispatch(stopLoading());
+        dispatch(FB_LOG_FAIL({...data, source: "signup"}))
+        dispatch(ToastActionsCreators.displayInfo(result.msg));
+      }
+    }).catch(error => {
+      console.log("error=> " ,error)
+      dispatch(stopLoading());
+    });
   }
 };
 
@@ -179,6 +181,12 @@ export default function reducer(state = initialState, action) {
     switch (action.type) {
         case LOG_IN_SUCCESS:
           return { ...state, userDetails: action.data };
+
+        case FB_LOG_IN_SUCCESS:
+          return { ...state, userDetails: action.data};
+
+        case FB_LOG_IN_FAIL:
+          return { ...state, userDetails: action.data};
 
         case GET_DETAILS:
         return { ...state, userDetails : { ...state.userDetails , ...action.data } }

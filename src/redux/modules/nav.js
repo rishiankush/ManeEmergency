@@ -9,7 +9,7 @@ import Idx from "../../utilities/Idx";
 import { NavigationActions } from "react-navigation";
 import { AppNavigator } from "../../config/navigator";
 //import { REHYDRATE } from "redux-persist/constants";
-import { NEW_CONSUMER_USER, LOG_IN_SUCCESS, FB_LOG_IN_SUCCESS } from './user';
+import { NEW_CONSUMER_USER, LOG_IN_SUCCESS, FB_LOG_IN_SUCCESS, FB_LOG_IN_FAIL } from './user';
 
 //Actions
 const GOBACK            = "GOBACK";
@@ -75,6 +75,15 @@ export default function reducer(state = initialState, action) {
                 NavigationActions.reset({
                   index: 0,
                   actions: [NavigationActions.navigate({ routeName: "Home" })],
+                }),
+                state
+            );
+
+        case FB_LOG_IN_FAIL:
+            return AppNavigator.router.getStateForAction(
+                NavigationActions.navigate({
+                    routeName: "Signup",
+                    params: action.data
                 }),
                 state
             );
