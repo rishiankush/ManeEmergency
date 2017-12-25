@@ -47,7 +47,7 @@ export default class StylishList extends Component {
   /**
   * Extract Item Key
   */
- // _keyExtractor = (item, index) => item._id;
+ _keyExtractor = (item, index) => item._id;
 
   renderItem({item, index}){
     let context = this;
@@ -64,7 +64,7 @@ export default class StylishList extends Component {
   }
 
   render(){
-    //console.log('props ********* ',this.props.data)
+    console.log('props ********* ',this.props.isRefreshing)
   	return(
       <View style={[styles.container]}>
         <FlatList
@@ -73,7 +73,7 @@ export default class StylishList extends Component {
           refreshing={this.props.isRefreshing}
           onEndReachedThreshold={0.8}
           onEndReached={()=>this.props.stylistListonReachedEnd()}
-          //keyExtractor={(item, index)=>{this._keyExtractor(item, index);console.log('item ****** ',item._id)}}
+          keyExtractor={(item, index)=>this._keyExtractor(item, index)}
           enableEmptySections={true}
           renderItem={this.renderItem}
           ListFooterComponent={this.renderFooter}

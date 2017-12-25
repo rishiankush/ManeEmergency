@@ -50,6 +50,7 @@ class Home extends Component<{}> {
       isLocationEnabled : true,
       stylistBook: false,
     }
+    this.interval = 0;
     this.isLoggedIn = false;
     this.isEndReached = false;
     //console.log('props ******** ',this.props)
@@ -63,6 +64,10 @@ class Home extends Component<{}> {
   componentDidMount(){
     this.setState({isRefreshing:true});
     this.getData(true);
+  }
+
+  componentWillUnmount(){
+    this.clearInterval(this.interval);
   }
 
   distanceFilter(){
@@ -84,72 +89,102 @@ class Home extends Component<{}> {
   getData(isIntialLoad){
     // console.log('initial load ******** ',isIntialLoad)
     let context = this;
-    if(isIntialLoad){
-      context.setTimeout(()=>{
-        if(context.props.location.currentLocation != null){
-          console.log('inside not null ******* ')
-          let requestObject = {
-            // position:{
-            //   lat : context.props.location.currentLocation.position.lat,
-            //   long : context.props.location.currentLocation.position.lng,
-            //   address : context.props.location.currentLocation.formattedAddress
-            // },
-            // role : 1,
-            // starts_on: context.state.starts_on,
-            // ends_on: context.state.ends_on,
-            page:context.state.skip,
-            count:context.state.limit
-          }
-          // context.setState({
-          //   position:{
-          //     lat : context.props.location.currentLocation.position.lat,
-          //     long : context.props.location.currentLocation.position.lng,
-          //     address : context.props.location.currentLocation.formattedAddress
-          //   }
-          // });
-          context.props.userActions.stylistList(requestObject,function(count) {
-            context.isEndReached = false;
-            if(count){
-              context.setState({
-                total:count,
-                isFooterVisible:false,
-                isRefreshing:false
-              });
-            }else{
-              context.setState({
-                isFooterVisible:false,
-                isRefreshing:false
-              });
-            }
-          });
-        }else{
-          console.log('inside else means location null ******* ')
-          // if(context.props.location.isError){
-          //   context.setState({
-          //     isFooterVisible:false,
-          //     isRefreshing:false,
-          //     isLocationEnabled:false
-          //   });
-          //   context.setTimeout(()=>{
-          //     Alert.alert(
-          //       "Location Permissions", 
-          //       "We need to access your location. Please go to Settings > Privacy > Location to allow Stylist to access your location.", 
-          //       [{
-          //         text: "Enable",
-          //         onPress:()=>{Permissions.openSettings()}
-          //       },{
-          //         text: "Cancel",
-          //         onPress:()=>{console.log("Cancel")}
-          //       }],
-          //       {cancelable: false}
-          //     );
-          //   },700);
-          // }else{
-          //   context.getData(true);
-          // }
+   //  if(isIntialLoad){
+   //    context.setTimeout(()=>{
+   //      if(context.props.location.currentLocation != null){
+   //        console.log('inside not null ******* ')
+   //        let requestObject = {
+   //          // position:{
+   //          //   lat : context.props.location.currentLocation.position.lat,
+   //          //   long : context.props.location.currentLocation.position.lng,
+   //          //   address : context.props.location.currentLocation.formattedAddress
+   //          // },
+   //          // role : 1,
+   //          // starts_on: context.state.starts_on,
+   //          // ends_on: context.state.ends_on,
+   //          page:context.state.skip,
+   //          count:context.state.limit
+   //        }
+   //        // context.setState({
+   //        //   position:{
+   //        //     lat : context.props.location.currentLocation.position.lat,
+   //        //     long : context.props.location.currentLocation.position.lng,
+   //        //     address : context.props.location.currentLocation.formattedAddress
+   //        //   }
+   //        // });
+   //        context.props.userActions.stylistList(requestObject,function(count) {
+   //          context.isEndReached = false;
+   //          if(count){
+   //            context.setState({
+   //              total:count,
+   //              isFooterVisible:false,
+   //              isRefreshing:false
+   //            });
+   //          }else{
+   //            context.setState({
+   //              isFooterVisible:false,
+   //              isRefreshing:false
+   //            });
+   //          }
+   //        });
+   //      }else{
+   //        console.log('inside else means location null ******* ')
+   //        // if(context.props.location.isError){
+   //        //   context.setState({
+   //        //     isFooterVisible:false,
+   //        //     isRefreshing:false,
+   //        //     isLocationEnabled:false
+   //        //   });
+   //        //   context.setTimeout(()=>{
+   //        //     Alert.alert(
+   //        //       "Location Permissions", 
+   //        //       "We need to access your location. Please go to Settings > Privacy > Location to allow Stylist to access your location.", 
+   //        //       [{
+   //        //         text: "Enable",
+   //        //         onPress:()=>{Permissions.openSettings()}
+   //        //       },{
+   //        //         text: "Cancel",
+   //        //         onPress:()=>{console.log("Cancel")}
+   //        //       }],
+   //        //       {cancelable: false}
+   //        //     );
+   //        //   },700);
+   //        // }else{
+   //        //   context.getData(true);
+   //        // }
 
           
-          let requestObject = {
+   //        let requestObject = {
+   //      // position:{
+   //      //   lat : context.state.position.lat,
+   //      //   long : context.state.position.long,
+   //      //   address : context.state.position.address,
+   //      // },
+   //      //user_type : "stylist",
+   //      page:context.state.skip,
+   //      count:context.state.limit
+   //    }
+   //    context.props.userActions.stylistList(requestObject,function(count) {
+   //      context.isEndReached = false;
+   //      if(count){
+   //        context.setState({
+   //          total:count,
+   //          isFooterVisible:false,
+   //          isRefreshing:false
+   //        });
+   //      }else{
+   //        context.setState({
+   //          isFooterVisible:false,
+   //          isRefreshing:false
+   //        });
+   //      }
+   //    });     
+   //      }
+   //    },500);
+   //  }else{
+         
+   // }
+   let requestObject = {
         // position:{
         //   lat : context.state.position.lat,
         //   long : context.state.position.long,
@@ -173,12 +208,7 @@ class Home extends Component<{}> {
             isRefreshing:false
           });
         }
-      });     
-        }
-      },500);
-    }else{
-         
-   }
+      });
   }
 
   checkUserStatus(){

@@ -28,6 +28,7 @@ export const LOG_IN_SUCCESS         = "LOG_IN_SUCCESS";
 export const GET_STYLIST_LIST       = "GET_STYLIST_LIST";
 export const FB_LOG_IN_SUCCESS      = "FB_LOG_IN_SUCCESS";
 export const FB_LOG_IN_FAIL         = "FB_LOG_IN_FAIL";
+export const CLEAR_STYLIST_LIST     = "CLEAR_LIST";
 
 // Action Creators
 export const CONSUMER_SIGNUP = (data) => ({ type: NEW_CONSUMER_USER,data});
@@ -39,6 +40,7 @@ export const setDeviceToken = (data) => ({type:DEVICE_TOKEN,data});
 //export const setRatings = (data) => ({type:RATINGS, data});
 export const getDetails = (data) => ({type:GET_DETAILS , data});
 export const getStylist = (data) => ({type: GET_STYLIST_LIST,data});
+export const clearStylistList = ()=>({type: CLEAR_STYLIST_LIST})
 /**
 * Consumer Signup API.
 */
@@ -146,11 +148,11 @@ export const signupFbAPI = (data) => {
 export const stylistList = (requestObject,callback) => {
   return dispatch => {
     RestClient.get("customer/stylist", requestObject).then((result) => {
-      //console.log('result stylist list ******* ',result.data[0].results)
+      console.log('result stylist list ******* ',result.data[0].results)
       if(result.status == '200'){
-        // if(requestObject.page==0){
-        //   dispatch(clearStylist());
-        // }
+        if(requestObject.page==0){
+          dispatch(clearStylistList());
+        }
         if(_.isFunction(callback)){
           callback(result.data[0].total);
         }
@@ -206,6 +208,9 @@ export default function reducer(state = initialState, action) {
 
         case GET_STYLIST_LIST:
         return { ...state, stylistList: action.data};
+
+        case CLEAR_STYLIST_LIST:
+        return { ...state, stylistList:[]};
 
         // case RATINGS:
         // return { ...state , reviews : action.data };
