@@ -40,6 +40,8 @@ export default class HomeScreenListing extends Component {
   }
 
   renderImage(item) {
+    console.log('item is here ********* ',item.index)
+    let totalItems = item.index;
     return(
       <Image 
         source={{ uri: Connection.getMedia()+item.item.image_name }}
@@ -53,7 +55,7 @@ export default class HomeScreenListing extends Component {
     let data = this.props.item;
     let imageThumbnails = data.thumbnail;
     //if (imageThumbnails.length > 4) {}
-    //console.log('data ******* ',data)
+    console.log('data ******* ',imageThumbnails.length)
     return(
       <TouchableOpacity style={styles.listContainer}
         onPress={()=>{
@@ -93,11 +95,23 @@ export default class HomeScreenListing extends Component {
               <Text style={styles.desc}>{Math.round(data.distance * 100) / 100}{data.units}</Text>
             </View>
           </View>
-          <FlatList
-            horizontal={true}
-            data={data.thumbnail}
-            renderItem={this.renderImage}
-          />
+          {imageThumbnails.length > 3 ?
+            <View style={{flexDirection:'row'}}>
+              <FlatList
+                horizontal={true}
+                data={data.thumbnail}
+                renderItem={this.renderImage}
+              />
+              <View style={{alignSelf:'flex-end',backgroundColor:'rgba(0,0,0,.1)',justifyContent:'center',alignItems:'center',height: Constants.BaseStyle.DEVICE_WIDTH*20/100,width: Constants.BaseStyle.DEVICE_WIDTH*20/100}}>
+                <Text style={{color:'#fff'}}>{imageThumbnails.length - 4} more</Text>
+              </View>
+            </View> :
+            <FlatList
+              horizontal={true}
+              data={data.thumbnail}
+              renderItem={this.renderImage}
+            />
+          }
         </View>
       </TouchableOpacity>
     )

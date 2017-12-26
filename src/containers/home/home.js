@@ -14,7 +14,7 @@ import ReactNative,{
   ScrollView,
   TouchableOpacity,
   Slider,
-  FlatList
+  FlatList,
 } from 'react-native';
 
 import Constants from '../../constants';
@@ -28,12 +28,18 @@ import * as userActions from "../../redux/modules/user";
 import { ToastActionsCreators } from 'react-native-redux-toast';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-//import Calendar from 'react-native-calendar';
+import Calendar from 'react-native-calendar';
 import ReactMixin from "react-mixin";
 import TimerMixin from "react-timer-mixin";
+import _ from 'lodash';
+import moment from "moment";
+import CalendarStyle from './CalendarStyle';
+import Modal from 'react-native-modal';
+import Button from '../../components/common/SubmitButton';
 class Home extends Component<{}> {
   constructor(props){
     super(props);
+    this.currentDate = new Date();
     this.state = {
       selected: 'distance',
       isChecked: 'fifty',
@@ -49,6 +55,14 @@ class Home extends Component<{}> {
       },
       isLocationEnabled : true,
       stylistBook: false,
+      availability    : false,
+      dateIndex       : 0 , 
+      isPastDate      : false,
+      starts_on       : moment(new Date()).seconds(0).minute(0).hours(0).toISOString(),
+      ends_on         : moment(new Date()).seconds(59).minute(59).hours(23).toISOString(),
+      local           : moment(new Date()).seconds(0).minute(0).hours(1).toISOString(),
+      monthsTraversed : [moment().format('MM-YYYY')],
+      isModalVisible: false
     }
     this.interval = 0;
     this.isLoggedIn = false;
@@ -83,7 +97,10 @@ class Home extends Component<{}> {
   }
 
   calenderFilter(){
-    this.setState({selected:'calender'})
+    this.setState({
+      selected:'calender',
+      isModalVisible: true
+    })
   }
 
   getData(isIntialLoad){
@@ -263,7 +280,65 @@ class Home extends Component<{}> {
     }
   }
 
+  /**
+  * Get Data Based on Selected Date.
+  */
+  requestOnDate(date) {
+    let context = this;
+    console.log('hello date ******* ',date)
+    // let starts_on = moment(date).seconds(0).minute(0).hours(0).toISOString(), 
+    //   ends_on = moment(date).seconds(59).minute(59).hours(23).toISOString(),
+    //   currentDate = moment(new Date()).seconds(0).minute(0).hours(0).toISOString();
+
+    // if(moment(starts_on).format("X")<moment(currentDate).format("X")) {
+    //   context.setState({
+    //     isPastDate  : true,
+    //     starts_on   : starts_on,
+    //     ends_on     : ends_on
+    //   });
+    // } else {
+    //   let leaves = [...this.props.availability.leaves];
+    //   let index = _.findIndex(leaves, function(o) {
+    //     let date2 = moment(starts_on).add(1,'h');
+    //     let date1 = moment(o.starts_on).format("X");
+    //     date2 = moment(date2).format("X");
+    //     return date1 == date2;
+    //   });
+    //   let local = moment(starts_on).add(1,'h');
+    //   context.setState({
+    //     isPastDate    : false,
+    //     starts_on     : starts_on,
+    //     ends_on       : ends_on,
+    //     availability  : index < 0 ? true : false,
+    //     local         : local
+    //   });
+    // }
+  }
+
+  /**
+  * Get Next/Prev Month Data on Calendar Change.
+  */
+  calendarData(data, place, setDate) {
+    let context = this;
+    if(setDate) {
+      context.currentDate = data._d;
+    }
+    let gotDate = moment(data._d).format('MM-YYYY'),
+      currentDate = moment().format('MM-YYYY');
+    let monthsTraversed = context.state.monthsTraversed;
+    monthsTraversed = [...monthsTraversed,...[gotDate]];
+    context.setState({monthsTraversed,numberOfBookings:0});
+    if(monthsTraversed.findIndex(each => each == gotDate) != -1){
+      // api call
+    }
+  }
+
+  _hideModal(){
+    this.setState({ isModalVisible: false }) 
+  }
+
   render() {
+    let { months, days} = Constants.i18n.calendar;
     return (
       <View style={styles.container}>
         <Image source={Constants.Images.home.userProfileImg} style={styles.userImg} resizeMode='stretch' />
@@ -310,6 +385,28 @@ class Home extends Component<{}> {
               {this.state.isChecked == 'onefifty' ? <Text style={{color:'rgb(252, 228, 149)'}}>$150 - $200</Text> : <Text style={{color:'#494A48'}}> $150 - $200</Text>}
             </TouchableOpacity>
           </View>
+        }
+        {this.state.selected == 'calender' &&
+          <Modal isVisible={this.state.isModalVisible}>
+            <Calendar
+              ref="calendar"
+              showEventIndicators
+              customStyle={CalendarStyle}
+              //eventDates={bookings}
+              //bookingFullDates={leaves}
+              scrollEnabled
+              showControls
+              dayHeadings={days}
+              monthNames={months}
+              titleFormat={'MMMMYY'}
+              prevButtonText={'<'}
+              nextButtonText={'>'}
+              onDateSelect={(date) => this.requestOnDate(date)}
+              onTouchPrev={(e) => this.calendarData(e,'prev',1)}
+              onTouchNext={(e) => this.calendarData(e,'next',1)}
+            />
+            <Button _Press={this._hideModal.bind(this)} text='Close' />
+          </Modal>
         }
         <StylishList
             {...this.props}
@@ -360,8 +457,10 @@ const styles = StyleSheet.create({
     alignSelf:'center',
     width: Constants.BaseStyle.DEVICE_WIDTH/100 * 80,
     //color:'rgb(252, 228, 149)'
+  },
+  calendar:{
+    backgroundColor:'#1A1F19'
   }
-
 });
 
 ReactMixin(Home.prototype, TimerMixin);
