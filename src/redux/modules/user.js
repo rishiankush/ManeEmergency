@@ -147,8 +147,8 @@ export const signupFbAPI = (data) => {
 */
 export const stylistList = (requestObject,callback) => {
   return dispatch => {
-    RestClient.get("customer/stylist", requestObject).then((result) => {
-      // console.log('result stylist list ******* ',result.data[0].results)
+    RestClient.post("customer/stylist", requestObject).then((result) => {
+      console.log('result stylist list ******* ',result.data[0].results)
       if(result.status == '200'){
         if(requestObject.page==0){
           dispatch(clearStylistList());
