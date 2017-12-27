@@ -40,8 +40,7 @@ export default class HomeScreenListing extends Component {
   }
 
   renderImage(item) {
-    console.log('item is here ********* ',item.index)
-    let totalItems = item.index;
+    //console.log('item is here ********* ',item.index)
     return(
       <Image 
         source={{ uri: Connection.getMedia()+item.item.image_name }}
@@ -54,8 +53,6 @@ export default class HomeScreenListing extends Component {
   render(){
     let data = this.props.item;
     let imageThumbnails = data.thumbnail;
-    //if (imageThumbnails.length > 4) {}
-    console.log('data ******* ',imageThumbnails.length)
     return(
       <TouchableOpacity style={styles.listContainer}
         onPress={()=>{
@@ -79,20 +76,20 @@ export default class HomeScreenListing extends Component {
             </View>
           </View>
           <View style={{flexDirection:'row',marginVertical:Constants.BaseStyle.DEVICE_HEIGHT/100 * 1.5}}>
-            <View style={{flex:1}}>
+            <View style={{flex:1,alignItems:'center'}}>
               <Text style={styles.boldText}>Rating</Text>
               <StarRating
                 editable={false}
                 rating={4}
               />
             </View>
-            <View style={{flex:1}}>
+            <View style={{flex:1,alignItems:'center'}}>
               <Text style={styles.boldText}>Start From</Text>
               <Text style={styles.desc}>${data.starting_price}</Text>
             </View>
-            <View style={{flex:1}}>
+            <View style={{flex:1,alignItems:'center'}}>
               <Text style={styles.boldText}>Distance</Text>
-              <Text style={styles.desc}>{Math.round(data.distance * 100) / 100}{data.units}</Text>
+              <Text style={styles.desc}>{Math.round(data.distance * 100) / 100} {data.units}</Text>
             </View>
           </View>
           {imageThumbnails.length > 3 ?

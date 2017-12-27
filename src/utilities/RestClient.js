@@ -32,10 +32,10 @@ class RestClient {
     static post(url, params, token = '',userId='') {
         let context = this,
             logintoken;
-            console.log('url *** ',Connection.getResturl() + url,token,userId)
+            //console.log('url *** ',Connection.getResturl() + url,token,userId)
         return new Promise(function(fulfill, reject) {
             context.isConnected().then(() => {
-                    console.log("url=> ",Connection.getResturl() + url ," requestObject=> ",params, " x-auth-token => ",token, " x-user-id => ",userId )
+                    //console.log("url=> ",Connection.getResturl() + url ," requestObject=> ",params, " x-auth-token => ",token, " x-user-id => ",userId )
                     fetch(Connection.getResturl() + url, {
                             method : "POST",
                             timeout : 1000*1*60,
@@ -52,7 +52,7 @@ class RestClient {
                             return response.text()
                         })
                         .then(responseText => {
-                            console.log('responseText*****',responseText);
+                            //console.log('responseText*****',responseText);
                             fulfill(JSON.parse(responseText));
                         })
                         .catch(error => {

@@ -13,9 +13,9 @@ import Loader from "../components/common/Loader";
 import ViewStylist from "../containers/booking/viewStylist";
 // export list of routes.
 export default routes = {
+	Loader      : { screen: Loader },
 	Home        : { screen: Home },
 	Login       : { screen: Login },
 	Signup      : { screen: Signup },
-	Loader      : { screen: Loader },
 	ViewStylist : { screen: ViewStylist }
 };

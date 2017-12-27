@@ -54,33 +54,40 @@ class Signup extends Component<{}> {
     
     if (_.isEmpty(fullName.trim())) {
       console.log('hello')
-      alert(enterFullName)
+      //alert(enterFullName)
+      dispatch(ToastActionsCreators.displayInfo(enterFullName))
       return;
     }
 
     if(_.isEmpty(email.trim())) {
-      alert(enterEmail);
+      //alert(enterEmail);
+      dispatch(ToastActionsCreators.displayInfo(enterEmail))
       return;
     }
 
     if(!Regex.validateEmail(email.trim())) {
-      alert(enterValidEmail);
+      //alert(enterValidEmail);
+      dispatch(ToastActionsCreators.displayInfo(enterValidEmail))
       return;
     }
     if(_.isEmpty(phoneNum.trim())) {
-      alert(enterMobile);
+      //alert(enterMobile);
+      dispatch(ToastActionsCreators.displayInfo(enterMobile))
       return;
     }
     if(!Regex.validateMobile(phoneNum.trim())) {
-      alert(enterValidMobile);
+      //alert(enterValidMobile);
+      dispatch(ToastActionsCreators.displayInfo(enterValidMobile))
       return;
     }
     if(_.isEmpty(password)) {
-      alert(enterPassword);
+      //alert(enterPassword);
+      dispatch(ToastActionsCreators.displayInfo(enterPassword))
       return;
     }
     if(!Regex.validatePassword(password)){
-      alert(enterValidPassword);
+      //alert(enterValidPassword);
+      dispatch(ToastActionsCreators.displayInfo(enterValidPassword))
       return;
     }
     this.props.UserActions.consumerSignup({...this.state});
@@ -158,6 +165,7 @@ class Signup extends Component<{}> {
               imageSource={Constants.Images.user.phoneNum}
               placeHolderText={Constants.i18n.signup.phoneNum}
               onChangeText={(phoneNum)=>this.setState({phoneNum})}
+              maximumLength={12}
               keyboard={'phone-pad'}
               returnKey='next'
             />

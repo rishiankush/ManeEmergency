@@ -32,7 +32,7 @@ export default function configureStore() {
      * */
     persistStore(
         store,
-        { blacklist: ["app", "nav", "toast", "location"], storage: AsyncStorage },
+        { blacklist: ["app", "nav", "toast","location"], storage: AsyncStorage },
         () => {
             let storeData = store.getState();
         }

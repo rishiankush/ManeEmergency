@@ -8,8 +8,8 @@
 import Idx from "../../utilities/Idx";
 import { NavigationActions } from "react-navigation";
 import { AppNavigator } from "../../config/navigator";
-//import { REHYDRATE } from "redux-persist/constants";
-import { NEW_CONSUMER_USER, LOG_IN_SUCCESS, FB_LOG_IN_SUCCESS, FB_LOG_IN_FAIL } from './user';
+import { REHYDRATE } from "redux-persist/constants";
+import { NEW_CONSUMER_USER, LOG_IN_SUCCESS, FB_LOG_IN_SUCCESS, FB_LOG_IN_FAIL, GET_DETAILS } from './user';
 
 //Actions
 const GOBACK            = "GOBACK";
@@ -20,8 +20,8 @@ const GOTO_AVAIL        = "GOTO_AVAIL";
 // Action Creators
 export const goBack = () => ({ type: GOBACK });
 export const reset  = (data) => ({ type: ResetNavigator, data });
-// export const goTo   = (data) => ({ type: GOTO, data });
-// export const goToAvail = () => ({ type: GOTO_AVAIL });
+export const goTo   = (data) => ({ type: GOTO, data });
+export const goToAvail = () => ({ type: GOTO_AVAIL });
 
 const initialState = AppNavigator.router.getStateForAction(NavigationActions.reset({
     index: 0,
@@ -97,13 +97,13 @@ export default function reducer(state = initialState, action) {
         //     state
         // );
 
-        // case GET_DETAILS:
-        // return AppNavigator.router.getStateForAction(
-        //     NavigationActions.navigate({
-        //         routeName: action.data.role === 1? "ChefViewProfile" : "ConsumerProfile" ,
-        //     }),
-        //     state
-        // );
+        case GET_DETAILS:
+        return AppNavigator.router.getStateForAction(
+            NavigationActions.navigate({
+                routeName: "Home",
+            }),
+            state
+        );
 
         // case GOTO_AVAIL:
         // console.log("goToAvail")
@@ -147,14 +147,14 @@ export default function reducer(state = initialState, action) {
         //         state
         //     );
 
-        // case REHYDRATE:
-        //     return AppNavigator.router.getStateForAction(
-        //         NavigationActions.reset({
-        //           index: 0,
-        //           actions: [NavigationActions.navigate({ routeName: firstState })],
-        //         }),
-        //         state
-        //     );
+        case REHYDRATE:
+            return AppNavigator.router.getStateForAction(
+                NavigationActions.reset({
+                  index: 0,
+                  actions: [NavigationActions.navigate({ routeName: firstState })],
+                }),
+                state
+            );
 
         default:
             return AppNavigator.router.getStateForAction(action, state);

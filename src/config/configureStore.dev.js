@@ -23,7 +23,12 @@ export default function configureStore() {
     const store = createStore(
         reducer(),
         compose(
-            autoRehydrate()
+            autoRehydrate(),
+            devToolsEnhancer({
+                name: Platform.OS,
+                hostname: "localhost",
+                port: 5678
+            })
         ),
         applyMiddleware(thunk)
     );

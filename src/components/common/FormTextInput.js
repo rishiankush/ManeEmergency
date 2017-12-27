@@ -51,7 +51,7 @@ export default class FormTextInput extends Component{
       headerText, placeHolderText, placeHolderColor,
       keyboard, secureText, returnKey, SubmitEditing,
       isPassword, showPassword, multiline, inputStyle, autoFocus,
-      editable,value,imageSource
+      editable,value,imageSource, maximumLength
     } = this.props;
 
     return(
@@ -80,7 +80,7 @@ export default class FormTextInput extends Component{
           onFocus={() => this.onFocus()}
           onBlur={() => this.setState({ isFocused: false, focusColor  : Constants.Colors.Gray,borderBottomWidth:1 })}
           multiline={multiline}
-          maxLength={50}
+          maxLength={this.props.maximumLength}
         />
       </View>
     );

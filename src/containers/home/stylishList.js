@@ -64,7 +64,6 @@ export default class StylishList extends Component {
   }
 
   render(){
-    //console.log('props ********* ',this.props.isRefreshing)
   	return(
       <View style={[styles.container]}>
         <FlatList

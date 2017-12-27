@@ -67,11 +67,11 @@ class Home extends Component<{}> {
     this.interval = 0;
     this.isLoggedIn = false;
     this.isEndReached = false;
-    //console.log('props ******** ',this.props)
+    console.log('props ******** ',this.props.user.stylistList)
     if (Idx(this.props, _ => _.user.userDetails.token)) {
       this.isLoggedIn = true;
       this.userToken = this.props.user.userDetails.token;
-      //this.userId = this.props.user.userDetails.userId;
+      //this.userId = this.props.user.userDetails.data._id;
     }
   }
 
@@ -209,7 +209,10 @@ class Home extends Component<{}> {
         // },
         //user_type : "stylist",
         page:context.state.skip,
-        count:context.state.limit
+        count:context.state.limit,
+        // stylist_rating:3,
+        // starting_price:40,
+        // ending_price:100
       }
       context.props.userActions.stylistList(requestObject,function(count) {
         context.isEndReached = false;
@@ -388,23 +391,26 @@ class Home extends Component<{}> {
         }
         {this.state.selected == 'calender' &&
           <Modal isVisible={this.state.isModalVisible}>
-            <Calendar
-              ref="calendar"
-              showEventIndicators
-              customStyle={CalendarStyle}
-              //eventDates={bookings}
-              //bookingFullDates={leaves}
-              scrollEnabled
-              showControls
-              dayHeadings={days}
-              monthNames={months}
-              titleFormat={'MMMMYY'}
-              prevButtonText={'<'}
-              nextButtonText={'>'}
-              onDateSelect={(date) => this.requestOnDate(date)}
-              onTouchPrev={(e) => this.calendarData(e,'prev',1)}
-              onTouchNext={(e) => this.calendarData(e,'next',1)}
-            />
+            <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
+            <Text style={{color:'white',fontSize:18, fontWeight:'bold'}}>Calender is under development</Text>
+            </View>
+            {/*<Calendar
+                          ref="calendar"
+                          showEventIndicators
+                          customStyle={CalendarStyle}
+                          //eventDates={bookings}
+                          //bookingFullDates={leaves}
+                          scrollEnabled
+                          showControls
+                          dayHeadings={days}
+                          monthNames={months}
+                          titleFormat={'MMMMYY'}
+                          prevButtonText={'<'}
+                          nextButtonText={'>'}
+                          onDateSelect={(date) => this.requestOnDate(date)}
+                          onTouchPrev={(e) => this.calendarData(e,'prev',1)}
+                          onTouchNext={(e) => this.calendarData(e,'next',1)}
+                        />*/}
             <Button _Press={this._hideModal.bind(this)} text='Close' />
           </Modal>
         }
@@ -421,6 +427,14 @@ class Home extends Component<{}> {
               this.setState({stylistBook:true,stylistDetails:data});
             }}
         />
+        <View style={{backgroundColor:'#292E27',alignItems:'center',flexDirection:'row',shadowColor:'#292E27',height:Constants.BaseStyle.DEVICE_HEIGHT/100 * 15}}>
+          <View style={{flex:1}}>
+            <Image source={Constants.Images.user.customer_act} style={[styles.filterStyle,{marginLeft:Constants.BaseStyle.DEVICE_WIDTH/100*25}]}/>
+          </View>
+          <View style={{flex:1}}>
+            <Image source={Constants.Images.user.customer} style={[styles.filterStyle,{marginLeft:Constants.BaseStyle.DEVICE_WIDTH/100*5}]}/>
+          </View>
+        </View>
       </View>
     );
   }

@@ -39,7 +39,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new CodePush(null, getApplicationContext(), BuildConfig.DEBUG),
+            new CodePush("iccm-H-5f3oiYOTezhjgtwDVP5R-f7609b74-b77d-432f-b7ce-ab6b5d303ab1", getApplicationContext(), BuildConfig.DEBUG),
             new FBSDKPackage(mCallbackManager)
       );
     }

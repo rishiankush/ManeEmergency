@@ -120,7 +120,7 @@ export const signupFbAPI = (data) => {
   let requestObject = {
     facebook_id:data.json.id
   }
-  console.log('requestObject ******* ',data)
+  //console.log('requestObject ******* ',data)
   return dispatch => {
     //dispatch(startLoading());
     RestClient.post("checkFaceBook",requestObject).then((result) => {
@@ -148,7 +148,7 @@ export const signupFbAPI = (data) => {
 export const stylistList = (requestObject,callback) => {
   return dispatch => {
     RestClient.post("customer/stylist", requestObject).then((result) => {
-      console.log('result stylist list ******* ',result.data[0].results)
+      //console.log('result stylist list ******* ',result.data[0].results)
       if(result.status == '200'){
         if(requestObject.page==0){
           dispatch(clearStylistList());

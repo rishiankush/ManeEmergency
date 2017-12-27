@@ -87,7 +87,7 @@ class Login extends Component<{}> {
           fetch('https://graph.facebook.com/v2.11/me?fields=email,name&access_token=' + data.accessToken.toString())
           .then((response) => response.json())
           .then((json) => {
-            //console.log('sdfda12143546546',json)
+            console.log('json is here *********** ',json)
             let fbObject = {
               json: json,
               loginType: context.state.loginType
