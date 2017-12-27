@@ -17,6 +17,7 @@
     "react-native-fbsdk": "^0.6.3",
     "react-native-geocoder": "^0.5.0",
     "react-native-instagram-login": "^1.0.4",
+    "react-native-instagram-oauth": "0.0.7",
     "react-native-loading-spinner-overlay": "^0.5.2",
     "react-native-navbar": "^2.1.0",
     "react-native-redux-toast": "^1.0.1",
